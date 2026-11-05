@@ -1,36 +1,106 @@
 
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+
 import MHIHeader from '../components/header-temp';
 
-const sentimentos = [
-  ['💭', 'Tristeza', 'Pode surgir diante de perdas e frustrações. Respeite seu tempo e procure apoio quando precisar.'],
-  ['🌀', 'Ansiedade', 'Pode aparecer diante de preocupações ou situações incertas.'],
-  ['🔥', 'Raiva', 'Pode sinalizar que algo incomodou você ou ultrapassou um limite importante.'],
-  ['🛡️', 'Medo', 'É uma resposta natural diante de situações percebidas como ameaçadoras.'],
-  ['🌙', 'Solidão', 'Pode indicar a necessidade de conexão, companhia e apoio.'],
-  ['⚖️', 'Culpa', 'Pode aparecer quando acreditamos ter agido contra nossos valores.'],
-  ['🔋', 'Esgotamento', 'Pode estar relacionado ao acúmulo de demandas e à falta de descanso.'],
-  ['🌱', 'Esperança', 'Pode ajudar a manter a motivação diante das dificuldades.'],
-];
+// Endereço da API para testes no navegador do computador
+const API_URL = 'http://localhost:3000';
+
+const emojis = {
+  'Alegria': '☀️',
+  'Tristeza': '💭',
+  'Ansiedade': '🌀',
+  'Raiva': '🔥',
+  'Medo': '🛡️',
+  'Solidão': '🌙',
+  'Culpa': '⚖️',
+  'Esgotamento': '🔋',
+  'Esperança': '🌱',
+};
 
 export default function SentimentosScreen({ navigation }) {
+  const [sentimentos, setSentimentos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
+
+  useEffect(() => {
+    async function buscarSentimentos() {
+      try {
+        setCarregando(true);
+        setErro('');
+
+        const resposta = await fetch(`${API_URL}/sentimentos`);
+
+        if (!resposta.ok) {
+          throw new Error('Não foi possível consultar os sentimentos.');
+        }
+
+        const dados = await resposta.json();
+
+        setSentimentos(dados);
+
+      } catch (error) {
+        console.error('Erro ao buscar sentimentos:', error);
+        setErro('Não foi possível carregar os sentimentos. Verifique se a API está funcionando.');
+      } finally {
+        setCarregando(false);
+      }
+    }
+
+    buscarSentimentos();
+  }, []);
+
   return (
     <View style={styles.fundo}>
       <MHIHeader navigation={navigation} ativa="Sentimentos" />
 
       <ScrollView contentContainerStyle={styles.conteudo}>
         <Text style={styles.titulo}>Seus sentimentos</Text>
+
         <Text style={styles.descricao}>
           Todo sentimento tem uma função. Reconhecer o que você sente
           pode ajudar a compreender suas necessidades.
         </Text>
 
-        {sentimentos.map(([emoji, nome, descricao]) => (
-          <View key={nome} style={styles.card}>
-            <Text style={styles.emoji}>{emoji}</Text>
-            <Text style={styles.nome}>{nome}</Text>
-            <Text style={styles.texto}>{descricao}</Text>
+        {carregando && (
+          <ActivityIndicator size="large" color="#168BC3" />
+        )}
+
+        {!!erro && (
+          <Text style={styles.erro}>{erro}</Text>
+        )}
+
+        {!carregando && !erro && sentimentos.length === 0 && (
+          <Text style={styles.mensagem}>
+            Nenhum sentimento cadastrado ainda.
+          </Text>
+        )}
+
+        {!carregando && sentimentos.map((item) => (
+          <View key={item.id} style={styles.card}>
+            <Text style={styles.emoji}>
+              {emojis[item.nome] || '💭'}
+            </Text>
+
+            <Text style={styles.nome}>{item.nome}</Text>
+
+            <Text style={styles.texto}>{item.descricao}</Text>
+
+            <Text style={styles.subtitulo}>Orientações</Text>
+
+            <Text style={styles.texto}>
+              {item.orientacoes || 'Não há orientações cadastradas.'}
+            </Text>
+
             <Text style={styles.subtitulo}>Quando buscar ajuda</Text>
+
             <Text style={styles.texto}>
               Se o sofrimento persistir ou dificultar seu cotidiano,
               conversar com alguém de confiança ou com um profissional
@@ -44,10 +114,25 @@ export default function SentimentosScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  fundo: { flex: 1, backgroundColor: '#F4FAFE' },
-  conteudo: { padding: 16, paddingBottom: 30 },
-  titulo: { fontSize: 26, fontWeight: 'bold', color: '#102D42', marginBottom: 8 },
-  descricao: { color: '#587184', lineHeight: 21, marginBottom: 18 },
+  fundo: {
+    flex: 1,
+    backgroundColor: '#F4FAFE',
+  },
+  conteudo: {
+    padding: 16,
+    paddingBottom: 30,
+  },
+  titulo: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#102D42',
+    marginBottom: 8,
+  },
+  descricao: {
+    color: '#587184',
+    lineHeight: 21,
+    marginBottom: 18,
+  },
   card: {
     backgroundColor: '#FFFFFF',
     borderColor: '#C8DDED',
@@ -56,8 +141,35 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 13,
   },
-  emoji: { fontSize: 25, marginBottom: 8 },
-  nome: { color: '#123047', fontSize: 18, fontWeight: 'bold', marginBottom: 8 },
-  texto: { color: '#587184', lineHeight: 21, marginBottom: 10 },
-  subtitulo: { color: '#168BC3', fontSize: 13, fontWeight: 'bold', marginBottom: 5 },
+  emoji: {
+    fontSize: 25,
+    marginBottom: 8,
+  },
+  nome: {
+    color: '#123047',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  texto: {
+    color: '#587184',
+    lineHeight: 21,
+    marginBottom: 10,
+  },
+  subtitulo: {
+    color: '#168BC3',
+    fontSize: 13,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  erro: {
+    color: '#C0392B',
+    textAlign: 'center',
+    marginTop: 15,
+  },
+  mensagem: {
+    color: '#587184',
+    textAlign: 'center',
+    marginTop: 15,
+  },
 });

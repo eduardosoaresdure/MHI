@@ -3,7 +3,12 @@ const cors = require('cors');
 require('dotenv').config();
 
 const db = require('./src/config/database');
+
 const sentimentosRoutes = require('./src/routes/sentimentos');
+
+const transtornosRoutes = require('./src/routes/transtornos');
+
+const localidadesRoutes = require('./src/routes/localidades');
 
 const app = express();
 
@@ -11,6 +16,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/sentimentos', sentimentosRoutes);
+
+app.use('/transtornos', transtornosRoutes);
+
+app.use('/localidades', localidadesRoutes);
 
 // Rota inicial
 app.get('/', (req, res) => {
