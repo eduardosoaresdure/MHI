@@ -6,6 +6,9 @@ import HomeScreen from '../screens/telainicial';
 import SentimentosScreen from '../screens/sentimentos';
 import TranstornosScreen from '../screens/transtornos';
 import LocalizacaoScreen from '../screens/localidades';
+import LoginScreen from '../screens/login';
+import CadastroScreen from '../screens/cadastro';
+import AdminScreen from '../screens/admin';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +27,10 @@ export default function AppNavigator() {
         <Stack.Screen name="Sentimentos" component={SentimentosScreen} />
         <Stack.Screen name="Transtornos" component={TranstornosScreen} />
         <Stack.Screen name="Localidades" component={LocalizacaoScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Cadastro" component={CadastroScreen} />
+        <Stack.Screen name="Admin" component={AdminScreen} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

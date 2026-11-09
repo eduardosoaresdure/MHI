@@ -10,6 +10,8 @@ const transtornosRoutes = require('./src/routes/transtornos');
 
 const localidadesRoutes = require('./src/routes/localidades');
 
+const authRoutes = require('./src/routes/authRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -20,6 +22,8 @@ app.use('/sentimentos', sentimentosRoutes);
 app.use('/transtornos', transtornosRoutes);
 
 app.use('/localidades', localidadesRoutes);
+
+app.use('/auth', authRoutes);
 
 // Rota inicial
 app.get('/', (req, res) => {

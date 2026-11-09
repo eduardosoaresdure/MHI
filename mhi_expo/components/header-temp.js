@@ -6,6 +6,7 @@ const links = [
   { nome: 'Sentimentos', tela: 'Sentimentos', icone: '♡' },
   { nome: 'Transtornos', tela: 'Transtornos', icone: '✚' },
   { nome: 'Localização', tela: 'Localidades', icone: '⌖' },
+  { nome: 'Entrar', tela: 'Login', icone: '♙' },
 ];
 
 export default function MHIHeader({ navigation, ativa }) {

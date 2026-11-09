@@ -274,3 +274,164 @@ As próximas etapas do MHI incluem:
 - Ampliação dos testes e da documentação do projeto.
 
 O desenvolvimento continuará de forma progressiva, priorizando a organização do código, a integração entre as tecnologias e a evolução das funcionalidades.
+
+## 3. Autenticação, JWT e níveis de usuário — Entrega 3
+
+3.1 Objetivos da terceira entrega
+
+A terceira etapa tem como objetivo implementar o sistema de autenticação, controle de acesso e gerenciamento de conteúdos do MHI.
+
+A aplicação deverá permitir que os usuários criem contas, realizem login e acessem funcionalidades conforme suas permissões.
+
+3.2 Cadastro e autenticação
+
+Será implementado um sistema de cadastro e login de usuários.
+
+O cadastro deverá armazenar:
+
+Nome.
+
+Email.
+
+Senha protegida por hash.
+
+Nível de usuário.
+
+As senhas serão armazenadas utilizando uma função de hash apropriada, evitando o armazenamento de senhas em texto puro.
+
+O login realizará a validação das credenciais e permitirá o acesso ao sistema mediante autenticação.
+
+3.3 Autenticação JWT
+
+A autenticação utilizará JSON Web Token (JWT).
+
+O funcionamento previsto será:
+
+O usuário realiza o login.
+
+O servidor valida as credenciais.
+
+O backend gera um token JWT.
+
+O aplicativo armazena o token.
+
+O token é enviado nas requisições protegidas por meio do cabeçalho Authorization, utilizando Bearer Token.
+
+O backend valida o token antes de permitir o acesso aos recursos protegidos.
+
+Também será implementada a funcionalidade de logout, responsável por encerrar a sessão do usuário no aplicativo.
+
+3.4 Níveis de usuário e permissões
+
+O MHI contará com dois níveis de acesso:
+
+Usuário padrão (USER):
+
+Consultar informações sobre sentimentos.
+
+Consultar informações sobre transtornos mentais.
+
+Consultar serviços de atendimento.
+
+Navegar pelas funcionalidades disponíveis.
+
+Realizar logout.
+
+Administrador (ADMIN):
+
+Consultar conteúdos cadastrados.
+
+Cadastrar novos sentimentos.
+
+Editar informações sobre sentimentos.
+
+Excluir sentimentos.
+
+Cadastrar novos transtornos.
+
+Editar informações sobre transtornos.
+
+Excluir transtornos.
+
+Gerenciar informações sobre localidades e serviços de atendimento.
+
+As permissões administrativas serão verificadas no backend, garantindo que usuários comuns não possam executar operações restritas.
+
+3.5 Rotas protegidas e controle de permissões
+
+Serão implementados middlewares responsáveis por:
+
+Validar a autenticidade dos tokens JWT.
+
+Identificar o usuário autenticado.
+
+Verificar o nível de acesso.
+
+Restringir operações administrativas.
+
+Impedir requisições de usuários sem autorização.
+
+As operações de consulta pública poderão ser disponibilizadas conforme as regras de acesso definidas para cada rota.
+
+3.6 CRUD completo
+
+O sistema deverá implementar as quatro operações fundamentais de gerenciamento de dados:
+
+Operação
+
+Método HTTP
+
+Finalidade
+
+Create
+
+POST
+
+Cadastrar informações
+
+Read
+
+GET
+
+Consultar informações
+
+Update
+
+PUT
+
+Editar informações
+
+Delete
+
+DELETE
+
+Excluir informações
+
+O CRUD será integrado ao banco de dados MySQL e permitirá que o administrador gerencie os conteúdos informativos da aplicação.
+
+3.7 Testes e validação
+
+A terceira etapa também prevê testes para verificar:
+
+Cadastro de usuários.
+
+Validação de senhas.
+
+Login e geração do JWT.
+
+Envio do token por Bearer Token.
+
+Validação de tokens.
+
+Logout.
+
+Acesso de usuários comuns.
+
+Acesso de administradores.
+
+Bloqueio de operações não autorizadas.
+
+Funcionamento das operações CRUD.
+
+Integração entre aplicativo, API e banco de dados.
+
