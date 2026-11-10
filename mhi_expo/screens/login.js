@@ -7,6 +7,7 @@ import {
   Pressable,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -61,7 +62,11 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.fundo}>
-      <Text style={styles.logo}>MHI</Text>
+      <Image
+  source={require('../assets/MHI logo.png')}
+  style={styles.logo}
+  resizeMode="contain"
+/>
       <Text style={styles.titulo}>Bem-vindo de volta!</Text>
       <Text style={styles.descricao}>Entre na sua conta para continuar.</Text>
 
@@ -107,11 +112,11 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   logo: {
-    color: '#168BC3',
-    fontSize: 38,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  width: 110,
+  height: 110,
+  alignSelf: 'center',
+  marginBottom: 15,
+},
   titulo: {
     color: '#102D42',
     fontSize: 25,

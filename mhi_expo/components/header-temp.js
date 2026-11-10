@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import {
   View,
@@ -7,12 +7,14 @@ import {
   Pressable,
   StyleSheet,
   ScrollView,
+  Animated,
+  Image,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const links = [
-  { nome: 'Home', tela: 'Home', icone: '⌂' },
+  { nome: 'Início', tela: 'Home', icone: '⌂' },
   { nome: 'Sentimentos', tela: 'Sentimentos', icone: '♡' },
   { nome: 'Transtornos', tela: 'Transtornos', icone: '✚' },
   { nome: 'Localização', tela: 'Localidades', icone: '⌖' },
@@ -20,6 +22,16 @@ const links = [
 
 export default function MHIHeader({ navigation, ativa }) {
   const [usuario, setUsuario] = useState(null);
+
+  const animacao = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animacao, {
+      toValue: 1,
+      duration: 650,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   useEffect(() => {
     async function verificarSessao() {
@@ -66,19 +78,39 @@ export default function MHIHeader({ navigation, ativa }) {
   }
 
   async function sair() {
-  await AsyncStorage.multiRemove(['token', 'usuario']);
-  setUsuario(null);
-  navigation.navigate('Home');
-}
+    await AsyncStorage.multiRemove(['token', 'usuario']);
+    setUsuario(null);
+    navigation.navigate('Home');
+  }
 
   return (
-    <View style={styles.header}>
+    <Animated.View
+      style={[
+        styles.header,
+        {
+          opacity: animacao,
+          transform: [
+            {
+              translateY: animacao.interpolate({
+                inputRange: [0, 1],
+                outputRange: [-18, 0],
+              }),
+            },
+          ],
+        },
+      ]}
+    >
+      {/* IDENTIDADE DO MHI */}
       <Pressable
         style={styles.marca}
         onPress={() => navigation.navigate('Home')}
       >
         <View style={styles.logo}>
-          <Text style={styles.logoTexto}>M</Text>
+          <Image
+  source={require('../assets/MHI logo.png')}
+  style={styles.logo}
+  resizeMode="contain"
+/>
         </View>
 
         <View>
@@ -89,62 +121,67 @@ export default function MHIHeader({ navigation, ativa }) {
         </View>
       </Pressable>
 
+      {/* MENU E USUÁRIO */}
       <View style={styles.menuContainer}>
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.menu}
-  >
-    {linksVisiveis.map((item) => {
-      const selecionada = ativa === item.tela;
-
-      return (
-        <Pressable
-          key={item.tela}
-          onPress={() => navigation.navigate(item.tela)}
-          style={[
-            styles.link,
-            selecionada && styles.linkAtivo,
-          ]}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.menu}
         >
-          <Text
-            style={[
-              styles.icone,
-              selecionada && styles.textoAtivo,
-            ]}
-          >
-            {item.icone}
-          </Text>
+          {linksVisiveis.map((item) => {
+            const selecionada = ativa === item.tela;
 
-          <Text
-            style={[
-              styles.linkTexto,
-              selecionada && styles.textoAtivo,
-            ]}
-          >
-            {item.nome}
-          </Text>
-        </Pressable>
-      );
-    })}
-  </ScrollView>
+            return (
+              <Pressable
+                key={item.tela}
+                onPress={() => navigation.navigate(item.tela)}
+                style={({ pressed }) => [
+                  styles.link,
+                  selecionada && styles.linkAtivo,
+                  pressed && styles.linkPressionado,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.icone,
+                    selecionada && styles.textoAtivo,
+                  ]}
+                >
+                  {item.icone}
+                </Text>
 
-  {usuario && (
-    <View style={styles.areaUsuario}>
-      <Text style={styles.nomeUsuario} numberOfLines={1}>
-        {usuario.nome}
-      </Text>
+                <Text
+                  style={[
+                    styles.linkTexto,
+                    selecionada && styles.textoAtivo,
+                  ]}
+                >
+                  {item.nome}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
 
-      <Pressable
-        style={styles.botaoSair}
-        onPress={sair}
-      >
-        <Text style={styles.textoSair}>Sair</Text>
-      </Pressable>
-    </View>
-  )}
-</View>
-    </View>
+        {usuario && (
+          <View style={styles.areaUsuario}>
+            <Text style={styles.nomeUsuario} numberOfLines={1}>
+              {usuario.nome}
+            </Text>
+
+            <Pressable
+              style={({ pressed }) => [
+                styles.botaoSair,
+                pressed && styles.botaoSairPressionado,
+              ]}
+              onPress={sair}
+            >
+              <Text style={styles.textoSair}>Sair</Text>
+            </Pressable>
+          </View>
+        )}
+      </View>
+    </Animated.View>
   );
 }
 
@@ -152,75 +189,107 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#DCEAF3',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+    borderBottomColor: '#E3EDF4',
+    paddingHorizontal: 22,
+    paddingTop: 20,
+    paddingBottom: 16,
+    alignItems: 'center',
     zIndex: 1,
+
+    shadowColor: '#173B53',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
   },
 
+  // MARCA
   marca: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    marginBottom: 10,
+    justifyContent: 'center',
+    marginBottom: 20,
   },
 
   logo: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+    width: 48,
+    height: 48,
+    borderRadius: 15,
     backgroundColor: '#168BC3',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 12,
   },
 
-  logoTexto: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 22,
-  },
+ logo: {
+  width: 65,
+  height: 65,
+  resizeMode: 'contain',
+  marginRight: 12,
+},
 
   nome: {
     color: '#123047',
     fontWeight: 'bold',
-    fontSize: 17,
+    fontSize: 21,
+    letterSpacing: 1,
   },
 
   subnome: {
-    color: '#587184',
-    fontSize: 10,
+    color: '#758B9B',
+    fontSize: 11,
+    marginTop: 2,
+  },
+
+  // MENU
+  menuContainer: {
+    width: '100%',
+    maxWidth: 1100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    gap: 12,
   },
 
   menu: {
     alignItems: 'center',
-    gap: 8,
-    paddingBottom: 3,
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 4,
+    flexGrow: 1,
   },
 
   link: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingVertical: 9,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    backgroundColor: '#F4FAFE',
+    gap: 7,
+    paddingVertical: 11,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    backgroundColor: '#F3F8FC',
+    borderWidth: 1,
+    borderColor: '#EDF2F6',
   },
 
   linkAtivo: {
     backgroundColor: '#168BC3',
+    borderColor: '#168BC3',
+  },
+
+  linkPressionado: {
+    backgroundColor: '#DCEFFA',
+    transform: [{ scale: 0.96 }],
   },
 
   icone: {
     color: '#587184',
-    fontSize: 16,
+    fontSize: 17,
   },
 
   linkTexto: {
-    color: '#123047',
-    fontSize: 12,
+    color: '#345469',
+    fontSize: 13,
     fontWeight: '600',
   },
 
@@ -228,38 +297,37 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-  menuContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: 12,
-},
+  // USUÁRIO
+  areaUsuario: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingLeft: 12,
+  },
 
-areaUsuario: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 10,
-  marginLeft: 10,
-},
+  nomeUsuario: {
+    color: '#24465B',
+    fontSize: 13,
+    fontWeight: 'bold',
+    maxWidth: 130,
+  },
 
-nomeUsuario: {
-  color: '#24465B',
-  fontSize: 13,
-  fontWeight: 'bold',
-  maxWidth: 130,
-},
+  botaoSair: {
+    backgroundColor: '#FCEEEE',
+    paddingVertical: 9,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+  },
 
-botaoSair: {
-  backgroundColor: '#FCEAEA',
-  paddingVertical: 8,
-  paddingHorizontal: 13,
-  borderRadius: 9,
-},
+  botaoSairPressionado: {
+    backgroundColor: '#F5DADA',
+    transform: [{ scale: 0.95 }],
+  },
 
-textoSair: {
-  color: '#C44747',
-  fontWeight: 'bold',
-  fontSize: 12,
-},
-
+  textoSair: {
+    color: '#C44747',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
 });

@@ -7,6 +7,7 @@ import {
   Pressable,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 
 const API_URL = 'http://localhost:3000';
@@ -56,7 +57,11 @@ export default function CadastroScreen({ navigation }) {
 
   return (
     <View style={styles.fundo}>
-      <Text style={styles.logo}>MHI</Text>
+      <Image
+  source={require('../assets/MHI logo.png')}
+  style={styles.logo}
+  resizeMode="contain"
+/>
       <Text style={styles.titulo}>Criar conta</Text>
       <Text style={styles.descricao}>Cadastre-se para acessar o MHI.</Text>
 
@@ -113,11 +118,11 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   logo: {
-    color: '#168BC3',
-    fontSize: 38,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  width: 110,
+  height: 110,
+  alignSelf: 'center',
+  marginBottom: 15,
+},
   titulo: {
     color: '#102D42',
     fontSize: 25,

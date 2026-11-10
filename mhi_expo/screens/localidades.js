@@ -61,7 +61,7 @@ export default function LocalizacaoScreen({ navigation }) {
         </Text>
 
         <View style={styles.mapa}>
-          <Text style={styles.emoji}>📍</Text>
+          <Text style={styles.emoji}></Text>
 
           <Text style={styles.nomeMapa}>Mapa dos serviços</Text>
 
