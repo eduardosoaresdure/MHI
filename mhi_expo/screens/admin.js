@@ -8,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -78,11 +79,16 @@ export default function AdminScreen({ navigation }) {
   async function salvar() {
     const campos = categorias[categoria];
 
-    if (campos.some((campo) => !String(formulario[campo] ?? '').trim())) {
-      Alert.alert('Atenção', 'Preencha todos os campos.');
-      return;
-    }
+const camposObrigatorios = categoria === 'Localidades'
+  ? ['nome', 'tipo_servico', 'endereco']
+  : campos;
 
+if (camposObrigatorios.some(
+  (campo) => !String(formulario[campo] ?? '').trim()
+)) {
+  console.log('Preencha os campos obrigatórios.');
+  return;
+}
     const metodo = editando ? 'PUT' : 'POST';
     const endereco = editando
       ? `${API_URL}/${categoria.toLowerCase()}/${editando}`
@@ -158,7 +164,11 @@ export default function AdminScreen({ navigation }) {
   return (
     <View style={styles.fundo}>
       <ScrollView contentContainerStyle={styles.conteudo}>
-        <Text style={styles.logo}>MHI</Text>
+        <Image
+  source={require('../assets/MHI logo.png')}
+  style={styles.logo}
+  resizeMode="contain"
+/>
         <Text style={styles.titulo}>Painel administrativo</Text>
         <Text style={styles.descricao}>
           Gerencie os conteúdos disponíveis na plataforma.
@@ -286,59 +296,248 @@ export default function AdminScreen({ navigation }) {
   );
 }
 
+
 const styles = StyleSheet.create({
-  fundo: { flex: 1, backgroundColor: '#F4FAFE' },
-  conteudo: { padding: 18, paddingBottom: 35 },
-  logo: { color: '#168BC3', fontSize: 30, fontWeight: 'bold', textAlign: 'center' },
-  titulo: { color: '#102D42', fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginTop: 10 },
-  descricao: { color: '#587184', textAlign: 'center', marginVertical: 12 },
-  categorias: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginVertical: 15 },
-  botaoCategoria: { padding: 12, borderRadius: 20, backgroundColor: '#E8F4FE' },
-  categoriaAtiva: { backgroundColor: '#168BC3' },
-  textoCategoria: { color: '#123047', fontWeight: 'bold' },
-  textoAtivo: { color: '#FFFFFF', fontWeight: 'bold' },
-  card: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C8DDED', borderRadius: 16, padding: 18 },
-  tituloCard: { color: '#123047', fontSize: 18, fontWeight: 'bold', marginBottom: 15 },
-  input: { backgroundColor: '#F4FAFE', borderWidth: 1, borderColor: '#C8DDED', borderRadius: 10, padding: 12, marginBottom: 10, minHeight: 45 },
-  botao: { backgroundColor: '#168BC3', padding: 15, borderRadius: 12, alignItems: 'center', marginTop: 5 },
-  textoBotao: { color: '#FFFFFF', fontWeight: 'bold' },
-  botaoCancelar: { padding: 12, alignItems: 'center' },
-  textoCancelar: { color: '#587184', fontWeight: 'bold' },
-  tituloLista: { color: '#102D42', fontSize: 20, fontWeight: 'bold', marginTop: 25, marginBottom: 12 },
-  item: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C8DDED', borderRadius: 12, padding: 15, marginBottom: 10 },
-  nomeItem: { color: '#123047', fontWeight: 'bold', fontSize: 16, marginBottom: 12 },
-  acoes: { flexDirection: 'row', gap: 10 },
-  botaoEditar: { backgroundColor: '#168BC3', padding: 10, borderRadius: 8 },
-  botaoExcluir: { backgroundColor: '#B93B3B', padding: 10, borderRadius: 8 },
-  textoAcao: { color: '#FFFFFF', fontWeight: 'bold' },
-  vazio: { color: '#587184', textAlign: 'center', padding: 20 },
-  botaoSair: { backgroundColor: '#587184', padding: 14, borderRadius: 12, alignItems: 'center', marginTop: 25 },
-  voltar: { color: '#168BC3', textAlign: 'center', marginTop: 18 },
+  fundo: {
+    flex: 1,
+    backgroundColor: '#F3F7FB',
+  },
+
+  conteudo: {
+    padding: 24,
+    paddingBottom: 45,
+    width: '100%',
+    maxWidth: 1000,
+    alignSelf: 'center',
+  },
+
+  // CABEÇALHO E LOGO
+  logo: {
+    width: 160,
+    height: 100,
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    marginBottom: 12,
+  },
+
+  titulo: {
+    color: '#173B53',
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+
+  descricao: {
+    color: '#758B9B',
+    fontSize: 14,
+    textAlign: 'center',
+    marginVertical: 12,
+    lineHeight: 21,
+  },
+
+  // CATEGORIAS
+  categorias: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginVertical: 22,
+  },
+
+  botaoCategoria: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E1EAF1',
+  },
+
+  categoriaAtiva: {
+    backgroundColor: '#168BC3',
+    borderColor: '#168BC3',
+  },
+
+  textoCategoria: {
+    color: '#526B7C',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+
+  textoAtivo: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+
+  // CARTÕES
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E6EDF3',
+    borderRadius: 18,
+    padding: 22,
+    marginTop: 8,
+    marginBottom: 20,
+    shadowColor: '#193B52',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+
+  tituloCard: {
+    color: '#173B53',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+
+  // CAMPOS
+  input: {
+    backgroundColor: '#F7FAFC',
+    borderWidth: 1,
+    borderColor: '#DCE6ED',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 13,
+    marginBottom: 13,
+    minHeight: 48,
+    color: '#24465B',
+    fontSize: 14,
+  },
+
+  // BOTÕES
+  botao: {
+    backgroundColor: '#168BC3',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+
+  textoBotao: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+
+  botaoCancelar: {
+    backgroundColor: '#EDF4F8',
+    padding: 13,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+
+  textoCancelar: {
+    color: '#526B7C',
+    fontWeight: 'bold',
+  },
+
+  // LISTAGEM
+  tituloLista: {
+    color: '#173B53',
+    fontSize: 21,
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginBottom: 15,
+  },
+
+  item: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5EDF3',
+    borderRadius: 14,
+    padding: 17,
+    marginBottom: 12,
+    shadowColor: '#193B52',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 5,
+    elevation: 1,
+  },
+
+  nomeItem: {
+    color: '#24465B',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 14,
+  },
+
+  acoes: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+
+  botaoEditar: {
+    backgroundColor: '#168BC3',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 9,
+  },
+
+  botaoExcluir: {
+    backgroundColor: '#D95353',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 9,
+  },
+
+  textoAcao: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+
+  vazio: {
+    color: '#8295A3',
+    textAlign: 'center',
+    padding: 22,
+    fontSize: 14,
+  },
+
+  // RODAPÉ
+  botaoSair: {
+    backgroundColor: '#EAF1F6',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 30,
+  },
+
+  textoBotaoSair: {
+    color: '#526B7C',
+    fontWeight: 'bold',
+  },
+
+  voltar: {
+    color: '#168BC3',
+    textAlign: 'center',
+    marginTop: 18,
+    fontWeight: '600',
+  },
+
+  // CONFIRMAÇÃO
   confirmacao: {
-  backgroundColor: '#FFFFFF',
-  borderWidth: 1,
-  borderColor: '#C8DDED',
-  borderRadius: 16,
-  padding: 20,
-  marginTop: 15,
-},
-tituloConfirmacao: {
-  color: '#102D42',
-  fontSize: 19,
-  fontWeight: 'bold',
-  marginBottom: 10,
-},
-textoConfirmacao: {
-  color: '#587184',
-  marginBottom: 18,
-},
-botaoCancelar: {
-  backgroundColor: '#E8F4FE',
-  padding: 10,
-  borderRadius: 8,
-},
-textoCancelar: {
-  color: '#123047',
-  fontWeight: 'bold',
-},
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E1EAF1',
+    borderRadius: 16,
+    padding: 22,
+    marginTop: 18,
+  },
+
+  tituloConfirmacao: {
+    color: '#173B53',
+    fontSize: 19,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+
+  textoConfirmacao: {
+    color: '#758B9B',
+    marginBottom: 18,
+    lineHeight: 21,
+  },
 });
+
