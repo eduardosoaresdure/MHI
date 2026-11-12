@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -5,11 +6,8 @@ require('dotenv').config();
 const db = require('./src/config/database');
 
 const sentimentosRoutes = require('./src/routes/sentimentos');
-
 const transtornosRoutes = require('./src/routes/transtornos');
-
 const localidadesRoutes = require('./src/routes/localidades');
-
 const authRoutes = require('./src/routes/authRoutes');
 
 const app = express();
@@ -17,12 +15,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Rotas da API
 app.use('/sentimentos', sentimentosRoutes);
-
 app.use('/transtornos', transtornosRoutes);
-
 app.use('/localidades', localidadesRoutes);
-
 app.use('/auth', authRoutes);
 
 // Rota inicial
@@ -40,9 +36,12 @@ async function iniciarServidor() {
         console.log('Conexão com MySQL estabelecida!');
 
         const PORT = process.env.PORT || 3000;
+        const HOST = '0.0.0.0';
 
-        app.listen(PORT, () => {
+        app.listen(PORT, HOST, () => {
             console.log(`Servidor rodando na porta ${PORT}`);
+            console.log(`Acesso local: http://localhost:${PORT}`);
+            console.log(`Servidor disponível na rede local.`);
         });
 
     } catch (erro) {

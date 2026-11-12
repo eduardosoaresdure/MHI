@@ -10,8 +10,7 @@ import {
 
 import MHIHeader from '../components/header-temp';
 
-// Endereço da API para testes no navegador do computador
-const API_URL = 'http://localhost:3000';
+import API_URL from '../config/api';
 
 const emojis = {
   'Alegria': '☀️',

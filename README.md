@@ -275,7 +275,7 @@ As próximas etapas do MHI incluem:
 
 O desenvolvimento continuará de forma progressiva, priorizando a organização do código, a integração entre as tecnologias e a evolução das funcionalidades.
 
-## 3. Autenticação, JWT e níveis de usuário — Entrega 3
+## 3. Autenticação, JWT e níveis de usuário — Entrega 3 (etapas anteriores já foram desenvolvidas)
 
 3.1 Objetivos da terceira entrega
 

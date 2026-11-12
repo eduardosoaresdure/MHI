@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://localhost:3000';
+import API_URL from '../config/api';
 
 const categorias = {
   Sentimentos: ['nome', 'descricao', 'orientacoes'],

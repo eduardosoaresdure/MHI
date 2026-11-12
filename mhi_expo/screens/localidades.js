@@ -11,7 +11,7 @@ import {
 
 import MHIHeader from '../components/header-temp';
 
-const API_URL = 'http://localhost:3000';
+import API_URL from '../config/api';
 
 export default function LocalizacaoScreen({ navigation }) {
   const [servicos, setServicos] = useState([]);
