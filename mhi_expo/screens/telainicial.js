@@ -26,6 +26,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.fundo}>
+    <View style={styles.layout}>
       <MHIHeader navigation={navigation} ativa="Home" />
 
       <ScrollView contentContainerStyle={styles.conteudo}>
@@ -77,91 +78,127 @@ export default function HomeScreen({ navigation }) {
         </View>
       </ScrollView>
     </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  
+layout: {
+  flex: 1,
+  flexDirection: 'row',
+},
+
+areaConteudo: {
+  flex: 1,
+  height: '100%',
+},
+
+  
   fundo: {
     flex: 1,
-    backgroundColor: '#F4FAFE',
+    backgroundColor: '#F4F7FA',
   },
   conteudo: {
-    padding: 16,
-    paddingBottom: 30,
+    padding: 20,
+    paddingBottom: 36,
   },
   hero: {
-    backgroundColor: '#D5ECF6',
-    borderRadius: 20,
-    padding: 24,
-    alignItems: 'center',
-    marginBottom: 24,
+    backgroundColor: '#EAF7FF',
+    borderColor: '#D4EEFF',
+    borderWidth: 1,
+    borderRadius: 24,
+    padding: 26,
+    alignItems: 'flex-start',
+    marginBottom: 30,
   },
   selo: {
-    color: '#168BC3',
+    color: '#168FD0',
     fontSize: 11,
-    marginBottom: 12,
+    fontWeight: '800',
+    letterSpacing: 1.1,
+    marginBottom: 16,
   },
   titulo: {
-    color: '#102D42',
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 12,
+    color: '#183247',
+    fontSize: 29,
+    lineHeight: 36,
+    fontWeight: '800',
+    textAlign: 'left',
+    marginBottom: 14,
   },
   descricao: {
-    color: '#587184',
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 18,
+    color: '#607789',
+    fontSize: 15,
+    textAlign: 'left',
+    lineHeight: 24,
+    marginBottom: 22,
   },
   botao: {
-    backgroundColor: '#168BC3',
-    borderRadius: 24,
-    padding: 14,
+    backgroundColor: '#38B6FF',
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 19,
+    shadowColor: '#168FD0',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.16,
+    shadowRadius: 8,
+    elevation: 3,
   },
   textoBotao: {
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '700',
   },
   tituloSecao: {
-    color: '#102D42',
+    color: '#183247',
     fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 14,
+    fontWeight: '800',
+    marginBottom: 16,
+    letterSpacing: -0.3,
   },
   card: {
     backgroundColor: '#FFFFFF',
-    borderColor: '#C8DDED',
+    borderColor: '#E3EDF4',
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 12,
+    borderRadius: 20,
+    padding: 22,
+    marginBottom: 14,
+    shadowColor: '#23445B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.055,
+    shadowRadius: 10,
+    elevation: 2,
   },
   icone: {
-    color: '#168BC3',
-    fontSize: 25,
-    marginBottom: 8,
+    color: '#168FD0',
+    fontSize: 27,
+    marginBottom: 12,
   },
   tituloCard: {
-    color: '#123047',
+    color: '#20394C',
     fontSize: 17,
-    fontWeight: 'bold',
-    marginBottom: 7,
-  },
-  textoCard: {
-    color: '#587184',
-    lineHeight: 21,
+    fontWeight: '700',
     marginBottom: 8,
   },
+  textoCard: {
+    color: '#667D8D',
+    fontSize: 14,
+    lineHeight: 22,
+    marginBottom: 9,
+  },
   link: {
-    color: '#168BC3',
-    fontWeight: 'bold',
-    marginTop: 4,
+    color: '#168FD0',
+    fontSize: 14,
+    fontWeight: '700',
+    marginTop: 5,
   },
   ajuda: {
-    backgroundColor: '#E8F4FE',
-    borderRadius: 16,
-    padding: 20,
-    marginTop: 8,
+    backgroundColor: '#EAF7FF',
+    borderColor: '#D4EEFF',
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 22,
+    marginTop: 10,
   },
 });

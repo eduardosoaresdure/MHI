@@ -58,7 +58,8 @@ export default function SentimentosScreen({ navigation }) {
 
   return (
     <View style={styles.fundo}>
-      <MHIHeader navigation={navigation} ativa="Sentimentos" />
+        <View style={styles.layout}>
+          <MHIHeader navigation={navigation} ativa="Sentimentos" />
 
       <ScrollView contentContainerStyle={styles.conteudo}>
         <Text style={styles.titulo}>Seus sentimentos</Text>
@@ -109,10 +110,21 @@ export default function SentimentosScreen({ navigation }) {
         ))}
       </ScrollView>
     </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  layout: {
+  flex: 1,
+  flexDirection: 'row',
+},
+
+areaConteudo: {
+  flex: 1,
+  height: '100%',
+},
+  
   fundo: {
     flex: 1,
     backgroundColor: '#F4FAFE',

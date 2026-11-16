@@ -47,8 +47,11 @@ export default function TranstornosScreen({ navigation }) {
   }, []);
 
   return (
+    
     <View style={styles.fundo}>
+    <View style={styles.layout}>
       <MHIHeader navigation={navigation} ativa="Transtornos" />
+
 
       <ScrollView contentContainerStyle={styles.conteudo}>
         <Text style={styles.titulo}>Transtornos mentais</Text>
@@ -115,10 +118,21 @@ export default function TranstornosScreen({ navigation }) {
         ))}
       </ScrollView>
     </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  layout: {
+  flex: 1,
+  flexDirection: 'row',
+},
+
+areaConteudo: {
+  flex: 1,
+  height: '100%',
+},
+  
   fundo: {
     flex: 1,
     backgroundColor: '#F4FAFE',

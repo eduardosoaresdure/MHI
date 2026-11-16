@@ -48,6 +48,7 @@ export default function LocalizacaoScreen({ navigation }) {
 
   return (
     <View style={styles.fundo}>
+      <View style={styles.layout}>
       <MHIHeader navigation={navigation} ativa="Localidades" />
 
       <ScrollView contentContainerStyle={styles.conteudo}>
@@ -125,10 +126,21 @@ export default function LocalizacaoScreen({ navigation }) {
         ))}
       </ScrollView>
     </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  layout: {
+  flex: 1,
+  flexDirection: 'row',
+},
+
+areaConteudo: {
+  flex: 1,
+  height: '100%',
+},
+  
   fundo: {
     flex: 1,
     backgroundColor: '#F4FAFE',
