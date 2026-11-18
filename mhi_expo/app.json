@@ -15,10 +15,19 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "com.eduduedudu.mhi_expo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "027ec0f1-6c76-4c49-ab26-ea07eff599e5"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
