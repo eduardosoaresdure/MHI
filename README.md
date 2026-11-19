@@ -435,3 +435,33 @@ Funcionamento das operações CRUD.
 
 Integração entre aplicativo, API e banco de dados.
 
+##  Entrega 4 — Finalização e disponibilização do aplicativo
+
+A quarta etapa do projeto consiste na finalização da aplicação MHI (Mental Health Informative), com foco na preparação, geração e disponibilização da versão mobile para Android.
+
+### 1. Geração do APK
+- Configuração do ambiente de build com Expo Application Services (EAS).
+- Definição do identificador Android da aplicação (`com.eduduedudu.mhi_expo`).
+- Configuração das credenciais necessárias para a compilação.
+- Geração do arquivo APK por meio do perfil `preview`, com distribuição interna.
+
+### 2. Testes da aplicação
+- Instalação do APK em um dispositivo Android.
+- Verificação da inicialização e abertura do aplicativo.
+- Conferência do funcionamento geral da interface e da navegação.
+
+### 3. Organização dos arquivos
+- Inclusão do APK final no repositório GitHub, na pasta `entregas/`.
+- Organização dos arquivos necessários para a entrega.
+- Manutenção dos arquivos do projeto, da API e do script SQL.
+
+### 4. Disponibilização e documentação
+- Publicação do APK para download diretamente pelo GitHub.
+- Atualização do README com informações sobre o projeto e sua execução.
+- Organização do repositório para facilitar o acesso e a avaliação pelo professor.
+
+### 5. Resultado esperado
+Ao final desta etapa, o projeto deverá contar com uma versão Android instalável, disponibilizada no GitHub, além dos arquivos-fonte, da API, do script SQL e das instruções necessárias para compreender e executar a aplicação.
+
+**Arquivo da aplicação:** `entregas/MHI.apk`
+
