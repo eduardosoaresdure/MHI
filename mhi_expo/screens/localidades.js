@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import MapaServicos from '../components/MapaServicos';
+
 import {
   View,
   Text,
@@ -61,16 +63,17 @@ export default function LocalizacaoScreen({ navigation }) {
           para encontrar atendimento na sua região.
         </Text>
 
-        <View style={styles.mapa}>
-          <Text style={styles.emoji}></Text>
+        <View style={styles.mapaContainer}>
+  <Text style={styles.nomeMapa}>
+    Mapa dos serviços
+  </Text>
 
-          <Text style={styles.nomeMapa}>Mapa dos serviços</Text>
+  <Text style={styles.texto}>
+    Explore os locais de atendimento em Santa Cruz do Sul.
+  </Text>
 
-          <Text style={styles.texto}>
-            A visualização interativa do mapa será adicionada
-            em uma próxima etapa do projeto.
-          </Text>
-        </View>
+  <MapaServicos servicos={servicos} />
+</View>
 
         {carregando && (
           <ActivityIndicator size="large" color="#168BC3" />
@@ -134,6 +137,10 @@ const styles = StyleSheet.create({
   layout: {
   flex: 1,
   flexDirection: 'row',
+},
+
+mapaContainer: {
+  marginBottom: 20,
 },
 
 areaConteudo: {
