@@ -1,204 +1,530 @@
 
-import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  Animated,
+} from 'react-native';
+
 import MHIHeader from '../components/header-temp';
 
 export default function HomeScreen({ navigation }) {
   const secoes = [
     {
       icone: '✚',
+      numero: '01',
       titulo: 'Transtornos explicados',
-      texto: 'Informações introdutórias sobre saúde mental.',
+      texto: 'Informações introdutórias para conhecer diferentes condições de saúde mental.',
       tela: 'Transtornos',
+      cor: '#EAF3FF',
+      corIcone: '#4385C5',
     },
     {
       icone: '♡',
+      numero: '02',
       titulo: 'Entenda seus sentimentos',
-      texto: 'Reconheça emoções e compreenda suas necessidades.',
+      texto: 'Reconheça suas emoções e compreenda melhor suas necessidades.',
       tela: 'Sentimentos',
+      cor: '#F3EDFF',
+      corIcone: '#9070C8',
     },
     {
       icone: '⌖',
+      numero: '03',
       titulo: 'Ajuda na sua região',
-      texto: 'Consulte informações sobre serviços de atendimento.',
+      texto: 'Encontre informações sobre serviços de atendimento próximos.',
       tela: 'Localidades',
+      cor: '#E8F7F1',
+      corIcone: '#419B79',
     },
   ];
 
+  // Valores iniciais das animações
+  const animacaoHero = useRef(new Animated.Value(0)).current;
+
+  const animacoesCards = useRef(
+    secoes.map(() => new Animated.Value(0))
+  ).current;
+
+  const animacaoAjuda = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(animacaoHero, {
+        toValue: 1,
+        duration: 650,
+        useNativeDriver: false,
+      }),
+
+      Animated.stagger(
+        150,
+        animacoesCards.map((animacao) =>
+          Animated.timing(animacao, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: false,
+          })
+        )
+      ),
+
+      Animated.sequence([
+        Animated.delay(450),
+        Animated.timing(animacaoAjuda, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: false,
+        }),
+      ]),
+    ]).start();
+  }, []);
+
+  const estiloAnimado = (animacao) => ({
+    opacity: animacao,
+    transform: [
+      {
+        translateY: animacao.interpolate({
+          inputRange: [0, 1],
+          outputRange: [18, 0],
+        }),
+      },
+    ],
+  });
+
   return (
     <View style={styles.fundo}>
-    <View style={styles.layout}>
-      <MHIHeader navigation={navigation} ativa="Home" />
+      <View style={styles.layout}>
+        <MHIHeader navigation={navigation} ativa="Home" />
 
-      <ScrollView contentContainerStyle={styles.conteudo}>
-        <View style={styles.hero}>
-          <Text style={styles.selo}>ODS 3 · SAÚDE E BEM-ESTAR</Text>
-
-          <Text style={styles.titulo}>
-            Cuidar da mente também é cuidar da saúde
-          </Text>
-
-          <Text style={styles.descricao}>
-            Informação clara sobre saúde mental para entender melhor o que
-            você sente e encontrar apoio.
-          </Text>
-
-          <Pressable
-            style={styles.botao}
-            onPress={() => navigation.navigate('Transtornos')}
+        <ScrollView
+          style={styles.areaConteudo}
+          contentContainerStyle={styles.conteudo}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* DESTAQUE PRINCIPAL */}
+          <Animated.View
+            style={[styles.hero, estiloAnimado(animacaoHero)]}
           >
-            <Text style={styles.textoBotao}>
-              Conhecer os transtornos →
+            <View style={styles.seloContainer}>
+              <Text style={styles.selo}>ODS 3</Text>
+
+              <Text style={styles.seloDescricao}>
+                SAÚDE E BEM-ESTAR
+              </Text>
+            </View>
+
+            <Text style={styles.titulo}>
+              Cuidar da mente também é cuidar da saúde.
             </Text>
-          </Pressable>
-        </View>
 
-        <Text style={styles.tituloSecao}>Explore o MHI</Text>
+            <Text style={styles.descricao}>
+              Informação, acolhimento e conhecimento para compreender
+              melhor a saúde mental e descobrir onde encontrar apoio.
+            </Text>
 
-        {secoes.map((item) => (
-          <Pressable
-            key={item.tela}
-            style={styles.card}
-            onPress={() => navigation.navigate(item.tela)}
+            <View style={styles.decoracao}>
+              <Text style={styles.decoracaoTexto}>MHI</Text>
+            </View>
+          </Animated.View>
+
+          {/* SEÇÕES */}
+          <View style={styles.cabecalhoSecao}>
+            <View>
+              <Text style={styles.subtituloSecao}>
+                CONHEÇA A PLATAFORMA
+              </Text>
+
+              <Text style={styles.tituloSecao}>
+                Explore o MHI
+              </Text>
+            </View>
+          </View>
+
+          {secoes.map((item, index) => (
+            <Animated.View
+              key={item.tela}
+              style={[
+                estiloAnimado(animacoesCards[index]),
+              ]}
+            >
+              <Pressable
+                style={({ pressed }) => [
+                  styles.card,
+                  pressed && styles.cardPressionado,
+                ]}
+                onPress={() => navigation.navigate(item.tela)}
+              >
+                <View
+                  style={[
+                    styles.iconeContainer,
+                    { backgroundColor: item.cor },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.icone,
+                      { color: item.corIcone },
+                    ]}
+                  >
+                    {item.icone}
+                  </Text>
+                </View>
+
+                <View style={styles.cardConteudo}>
+                  <Text style={styles.numero}>
+                    {item.numero}
+                  </Text>
+
+                  <Text style={styles.tituloCard}>
+                    {item.titulo}
+                  </Text>
+
+                  <Text style={styles.textoCard}>
+                    {item.texto}
+                  </Text>
+
+                  <Text style={styles.link}>
+                    Conhecer seção →
+                  </Text>
+                </View>
+              </Pressable>
+            </Animated.View>
+          ))}
+
+          {/* APOIO */}
+          <Animated.View
+            style={[
+              styles.ajuda,
+              estiloAnimado(animacaoAjuda),
+            ]}
           >
-            <Text style={styles.icone}>{item.icone}</Text>
-            <Text style={styles.tituloCard}>{item.titulo}</Text>
-            <Text style={styles.textoCard}>{item.texto}</Text>
-            <Text style={styles.link}>Explorar →</Text>
-          </Pressable>
-        ))}
+            <View style={styles.ajudaCabecalho}>
+              <View style={styles.ajudaIcone}>
+                <Text style={styles.ajudaIconeTexto}>♡</Text>
+              </View>
 
-        <View style={styles.ajuda}>
-          <Text style={styles.tituloCard}>Precisa conversar?</Text>
-          <Text style={styles.textoCard}>
-            CVV — 188: apoio emocional gratuito.
+              <View style={{ flex: 1 }}>
+                <Text style={styles.ajudaSubtitulo}>
+                  VOCÊ NÃO ESTÁ SOZINHO
+                </Text>
+
+                <Text style={styles.tituloAjuda}>
+                  Onde buscar apoio?
+                </Text>
+              </View>
+            </View>
+
+            <Text style={styles.textoAjuda}>
+              Existem serviços gratuitos que podem oferecer
+              orientação e atendimento.
+            </Text>
+
+            <View style={styles.linhaAjuda} />
+
+            <View style={styles.contato}>
+              <View>
+                <Text style={styles.nomeContato}>CVV</Text>
+
+                <Text style={styles.descricaoContato}>
+                  Apoio emocional gratuito
+                </Text>
+              </View>
+
+              <Text style={styles.numeroContato}>188</Text>
+            </View>
+
+            <View style={styles.linhaAjuda} />
+
+            <View style={styles.contato}>
+              <View>
+                <Text style={styles.nomeContato}>SAMU</Text>
+
+                <Text style={styles.descricaoContato}>
+                  Emergências médicas
+                </Text>
+              </View>
+
+              <Text style={styles.numeroContato}>192</Text>
+            </View>
+          </Animated.View>
+
+          <Text style={styles.rodape}>
+            MHI · Informação e conscientização sobre saúde mental.
           </Text>
-          <Text style={styles.textoCard}>
-            SAMU — 192: emergências médicas.
-          </Text>
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  
-layout: {
-  flex: 1,
-  flexDirection: 'row',
-},
-
-areaConteudo: {
-  flex: 1,
-  height: '100%',
-},
-
-  
   fundo: {
     flex: 1,
     backgroundColor: '#F4F7FA',
   },
+
+  layout: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+
+  areaConteudo: {
+    flex: 1,
+    height: '100%',
+  },
+
   conteudo: {
-    padding: 20,
-    paddingBottom: 36,
+    padding: 28,
+    paddingBottom: 45,
+    maxWidth: 1100,
+    width: '100%',
+    alignSelf: 'center',
   },
+
   hero: {
-    backgroundColor: '#EAF7FF',
-    borderColor: '#D4EEFF',
+    backgroundColor: '#E8F5FF',
     borderWidth: 1,
-    borderRadius: 24,
-    padding: 26,
-    alignItems: 'flex-start',
-    marginBottom: 30,
+    borderColor: '#D5EAF9',
+    borderRadius: 26,
+    padding: 32,
+    marginBottom: 38,
+    overflow: 'hidden',
   },
+
+  seloContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 23,
+  },
+
   selo: {
-    color: '#168FD0',
+    backgroundColor: '#168FD0',
+    color: '#FFFFFF',
     fontSize: 11,
     fontWeight: '800',
-    letterSpacing: 1.1,
-    marginBottom: 16,
+    paddingVertical: 7,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
+
+  seloDescricao: {
+    color: '#4383A8',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1,
+    marginLeft: 10,
+  },
+
   titulo: {
     color: '#183247',
-    fontSize: 29,
-    lineHeight: 36,
+    fontSize: 34,
+    lineHeight: 42,
     fontWeight: '800',
-    textAlign: 'left',
-    marginBottom: 14,
+    maxWidth: 650,
+    marginBottom: 16,
   },
+
   descricao: {
     color: '#607789',
     fontSize: 15,
-    textAlign: 'left',
-    lineHeight: 24,
-    marginBottom: 22,
+    lineHeight: 25,
+    maxWidth: 620,
+    marginBottom: 5,
   },
-  botao: {
-    backgroundColor: '#38B6FF',
-    borderRadius: 14,
-    paddingVertical: 14,
-    paddingHorizontal: 19,
-    shadowColor: '#168FD0',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.16,
-    shadowRadius: 8,
-    elevation: 3,
+
+  decoracao: {
+    position: 'absolute',
+    right: -25,
+    bottom: -45,
+    width: 190,
+    height: 190,
+    borderRadius: 100,
+    backgroundColor: '#D7EDFC',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  textoBotao: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
+
+  decoracaoTexto: {
+    color: '#C1E1F5',
+    fontSize: 55,
+    fontWeight: '900',
   },
+
+  cabecalhoSecao: {
+    marginBottom: 20,
+  },
+
+  subtituloSecao: {
+    color: '#168FD0',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 1.3,
+    marginBottom: 7,
+  },
+
   tituloSecao: {
     color: '#183247',
-    fontSize: 22,
+    fontSize: 25,
     fontWeight: '800',
-    marginBottom: 16,
-    letterSpacing: -0.3,
   },
+
   card: {
     backgroundColor: '#FFFFFF',
-    borderColor: '#E3EDF4',
     borderWidth: 1,
-    borderRadius: 20,
-    padding: 22,
+    borderColor: '#E5EDF3',
+    borderRadius: 19,
+    padding: 21,
     marginBottom: 14,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     shadowColor: '#23445B',
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.055,
-    shadowRadius: 10,
+    shadowOpacity: 0.045,
+    shadowRadius: 9,
     elevation: 2,
   },
-  icone: {
-    color: '#168FD0',
-    fontSize: 27,
-    marginBottom: 12,
+
+  cardPressionado: {
+    backgroundColor: '#F8FBFD',
+    opacity: 0.85,
   },
+
+  iconeContainer: {
+    width: 54,
+    height: 54,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 18,
+  },
+
+  icone: {
+    fontSize: 27,
+    fontWeight: '700',
+  },
+
+  cardConteudo: {
+    flex: 1,
+  },
+
+  numero: {
+    color: '#8AA0AF',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 1,
+    marginBottom: 5,
+  },
+
   tituloCard: {
     color: '#20394C',
     fontSize: 17,
-    fontWeight: '700',
-    marginBottom: 8,
+    fontWeight: '800',
+    marginBottom: 7,
   },
+
   textoCard: {
     color: '#667D8D',
     fontSize: 14,
     lineHeight: 22,
     marginBottom: 9,
   },
+
   link: {
     color: '#168FD0',
-    fontSize: 14,
-    fontWeight: '700',
-    marginTop: 5,
+    fontSize: 13,
+    fontWeight: '800',
+    marginTop: 3,
   },
+
   ajuda: {
-    backgroundColor: '#EAF7FF',
-    borderColor: '#D4EEFF',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#DCEAF2',
     borderWidth: 1,
-    borderRadius: 20,
-    padding: 22,
-    marginTop: 10,
+    borderRadius: 22,
+    padding: 24,
+    marginTop: 23,
+  },
+
+  ajudaCabecalho: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+
+  ajudaIcone: {
+    backgroundColor: '#EAF7FF',
+    width: 48,
+    height: 48,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+
+  ajudaIconeTexto: {
+    color: '#168FD0',
+    fontSize: 26,
+  },
+
+  ajudaSubtitulo: {
+    color: '#168FD0',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+
+  tituloAjuda: {
+    color: '#20394C',
+    fontSize: 19,
+    fontWeight: '800',
+  },
+
+  textoAjuda: {
+    color: '#667D8D',
+    fontSize: 14,
+    lineHeight: 22,
+    marginBottom: 15,
+  },
+
+  linhaAjuda: {
+    height: 1,
+    backgroundColor: '#E8EEF3',
+    marginVertical: 12,
+  },
+
+  contato: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  nomeContato: {
+    color: '#20394C',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+
+  descricaoContato: {
+    color: '#718694',
+    fontSize: 12,
+    marginTop: 3,
+  },
+
+  numeroContato: {
+    color: '#168FD0',
+    fontSize: 22,
+    fontWeight: '900',
+  },
+
+  rodape: {
+    color: '#91A2AD',
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: 30,
   },
 });
